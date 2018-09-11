@@ -5,6 +5,7 @@ using OAuthXFDemo.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Prism.Unity;
+using OAuthXFDemo.Services;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace OAuthXFDemo
@@ -24,13 +25,16 @@ namespace OAuthXFDemo
         {
             InitializeComponent();
 
-            await NavigationService.NavigateAsync("NavigationPage/MainPage");
+            await NavigationService.NavigateAsync("NavigationPage/LoginPage");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
+            containerRegistry.RegisterForNavigation<LoginPage>();
+
+            containerRegistry.RegisterSingleton(typeof(IAuthenticationService), typeof(AuthenticationService));            
         }
     }
 }
