@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthXFDemo", "OAuthXFDemo\OAuthXFDemo\OAuthXFDemo.csproj", "{53039BDA-2B16-4A4E-8F1C-C82001CB89B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthXFDemo.Android", "OAuthXFDemo\OAuthXFDemo.Android\OAuthXFDemo.Android.csproj", "{D11EA817-5A5A-41E6-A225-FACB1404F2E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53039BDA-2B16-4A4E-8F1C-C82001CB89B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53039BDA-2B16-4A4E-8F1C-C82001CB89B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53039BDA-2B16-4A4E-8F1C-C82001CB89B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53039BDA-2B16-4A4E-8F1C-C82001CB89B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D11EA817-5A5A-41E6-A225-FACB1404F2E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D11EA817-5A5A-41E6-A225-FACB1404F2E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D11EA817-5A5A-41E6-A225-FACB1404F2E8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D11EA817-5A5A-41E6-A225-FACB1404F2E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D11EA817-5A5A-41E6-A225-FACB1404F2E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D11EA817-5A5A-41E6-A225-FACB1404F2E8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9AFB82F7-CD03-4891-9939-4D67D0857F3D}
+	EndGlobalSection
+EndGlobal
