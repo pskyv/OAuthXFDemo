@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Auth;
+using Xamarin.Essentials;
 
 namespace OAuthXFDemo.Services
 {    
@@ -15,10 +16,20 @@ namespace OAuthXFDemo.Services
     {
         private string userInfoUrl = $"{Constants.BaseEndpoint}/connect/userinfo";
         private HttpClient _client;
+        private NetworkAccess _networkAccess;
+        
 
         public ApiService()
         {
-            ConfigureHttpClient();            
+            ConfigureHttpClient();
+
+            _networkAccess = Connectivity.NetworkAccess;
+            Connectivity.ConnectivityChanged += OnConnectivityChanged;
+        }
+
+        private void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            _networkAccess = e.NetworkAccess;   
         }
 
         private void ConfigureHttpClient()
@@ -35,6 +46,12 @@ namespace OAuthXFDemo.Services
 
         public async Task<ApplicationUser> GetUserInfo()
         {
+            if(_networkAccess == NetworkAccess.None)
+            {
+                HelperFunctions.ShowToastMessage(ToastMessageType.Error, "There's no network connection");
+                return null;
+            }
+
             ApplicationUser user = null;
 
             var response = await _client.GetAsync(userInfoUrl);
