@@ -19,6 +19,11 @@
             <Label Text="Role: " />
             <Label Text="{Binding User.Role}" />
         </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Token expires: " />
+            <Label Text="{Binding TokenExpires, StringFormat='{}{0:dd/MM/yyyy hh:mm:ss}'}" />
+        </StackLayout>
     </StackLayout>
 
 </ContentPage>

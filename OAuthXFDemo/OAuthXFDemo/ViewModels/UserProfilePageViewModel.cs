@@ -6,6 +6,7 @@ using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xamarin.Essentials;
 
 namespace OAuthXFDemo.ViewModels
 {
@@ -24,6 +25,12 @@ namespace OAuthXFDemo.ViewModels
             get { return _user; }
             set { SetProperty(ref _user, value); }
         }
+
+        public DateTime TokenExpires
+        {
+            get { return Preferences.Get("ExpiryDate", DateTime.Now); }
+        }
+
 
         public async void OnNavigatingTo(NavigationParameters parameters)
         {

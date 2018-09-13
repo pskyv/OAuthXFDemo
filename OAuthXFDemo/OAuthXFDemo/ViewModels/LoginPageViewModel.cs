@@ -18,6 +18,7 @@ namespace OAuthXFDemo.ViewModels
         public LoginPageViewModel(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
+            Preferences.Set("IsLoggedIn", false);
             HasConnection = !(Connectivity.NetworkAccess == NetworkAccess.None);
             Connectivity.ConnectivityChanged += OnConnectivityChanged;
         }

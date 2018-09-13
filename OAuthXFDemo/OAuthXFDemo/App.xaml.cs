@@ -6,6 +6,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Prism.Unity;
 using OAuthXFDemo.Services;
+using Xamarin.Essentials;
+using System;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace OAuthXFDemo
@@ -24,8 +26,15 @@ namespace OAuthXFDemo
         protected override async void OnInitialized()
         {
             InitializeComponent();
-
-            await NavigationService.NavigateAsync("LoginPage");
+            
+            if (Preferences.Get("IsLoggedIn", false) && DateTime.Now < Preferences.Get("ExpiryDate", DateTime.Now))
+            {
+                await NavigationService.NavigateAsync("NavigationPage/UserProfilePage");
+            }
+            else
+            {
+                await NavigationService.NavigateAsync("LoginPage");
+            }
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)

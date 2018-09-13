@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Auth;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace OAuthXFDemo.Services
@@ -14,7 +15,7 @@ namespace OAuthXFDemo.Services
     {
         private readonly INavigationService _navigationService;
         private string authorizeUrl = $"{Constants.BaseEndpoint}/connect/authorize";
-        private string accesstokenUrl = $"{Constants.BaseEndpoint}/connect/token";        
+        private string accesstokenUrl = $"{Constants.BaseEndpoint}/connect/token";
 
         public AuthenticationService(INavigationService navigationService)
         {
@@ -31,7 +32,7 @@ namespace OAuthXFDemo.Services
                 new Uri(authorizeUrl),
                 new Uri(Constants.redirectUri),
                 new Uri(accesstokenUrl),
-                null, 
+                null,
                 true
                 );
 
@@ -39,7 +40,7 @@ namespace OAuthXFDemo.Services
             Authenticator.Error += OnAuthenticatorError;
 
             AuthenticationState.Authenticator = Authenticator;
-        }        
+        }
 
         private async void OnAuthenticatorCompleted(object sender, AuthenticatorCompletedEventArgs e)
         {
@@ -54,6 +55,10 @@ namespace OAuthXFDemo.Services
             if (e.IsAuthenticated)
             {
                 await AccountStore.Create().SaveAsync(e.Account, Constants.AccessTokenKey); //Account properties: access_token, expires_in, refresh_token, token_type
+                Preferences.Set("IsLoggedIn", true);
+                double expiresIn = 0;
+                Double.TryParse(e.Account.Properties["expires_in"], out expiresIn);
+                Preferences.Set("ExpiryDate", DateTime.Now.AddSeconds(expiresIn));
 
                 await NavigateToPageAsync();
                 DependencyService.Get<IActivityService>().StartActivity();
@@ -67,7 +72,7 @@ namespace OAuthXFDemo.Services
 
         private void OnAuthenticatorError(object sender, AuthenticatorErrorEventArgs e)
         {
-            
+
         }
 
         public static OAuth2Authenticator Authenticator;
@@ -79,7 +84,7 @@ namespace OAuthXFDemo.Services
                 var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
                 presenter.Login(Authenticator);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
