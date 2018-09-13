@@ -1,16 +1,24 @@
 ﻿using OAuthXFDemo.Utils;
+using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Auth;
+using Xamarin.Forms;
 
 namespace OAuthXFDemo.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        public AuthenticationService()
+        private readonly INavigationService _navigationService;
+        private string authorizeUrl = $"{Constants.BaseEndpoint}/connect/authorize";
+        private string accesstokenUrl = $"{Constants.BaseEndpoint}/connect/token";
+
+        public AuthenticationService(INavigationService navigationService)
         {
-            //ConfigureAuthenticator();
+            _navigationService = navigationService;
+            ConfigureAuthenticator();
         }
 
         private void ConfigureAuthenticator()
@@ -19,9 +27,9 @@ namespace OAuthXFDemo.Services
                 Constants.clientId,
                 Constants.clientSecret,
                 Constants.scope,
-                new Uri(Constants.authorizeUrl),
+                new Uri(authorizeUrl),
                 new Uri(Constants.redirectUri),
-                new Uri(Constants.accesstokenUrl),
+                new Uri(accesstokenUrl),
                 null, 
                 true
                 );
@@ -32,12 +40,27 @@ namespace OAuthXFDemo.Services
             AuthenticationState.Authenticator = Authenticator;
         }        
 
-        private void OnAuthenticatorCompleted(object sender, AuthenticatorCompletedEventArgs e)
+        private async void OnAuthenticatorCompleted(object sender, AuthenticatorCompletedEventArgs e)
         {
-            if (e.IsAuthenticated)
+            var authenticator = sender as OAuth2Authenticator;
+
+            if (authenticator != null)
             {
-                
+                authenticator.Completed -= OnAuthenticatorCompleted;
+                authenticator.Error -= OnAuthenticatorError;
             }
+
+            if (e.IsAuthenticated)
+            {                
+                var accessToken = e.Account.Properties["access_token"].ToString();
+                await NavigateToPage();
+                DependencyService.Get<IActivityService>().StartActivity();
+            }
+        }
+
+        private async Task NavigateToPage()
+        {
+            await _navigationService.NavigateAsync("MainPage");
         }
 
         private void OnAuthenticatorError(object sender, AuthenticatorErrorEventArgs e)
@@ -45,12 +68,19 @@ namespace OAuthXFDemo.Services
             
         }
 
-        public OAuth2Authenticator Authenticator;
+        public static OAuth2Authenticator Authenticator;
 
         public void AuthenticateUser()
         {
-            var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
-            presenter.Login(Authenticator);
+            try
+            {
+                var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
+                presenter.Login(Authenticator);
+            }
+            catch(Exception e)
+            {
+
+            }
         }
     }
 }

@@ -2,23 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using OAuthXFDemo.Services;
 
 namespace OAuthXFDemo.Droid
 {
-    [Activity(Label = "CustomUrlSchemeInterceptorActivity", NoHistory = true, LaunchMode = LaunchMode.SingleTop)]
+    [Activity(Label = "CustomUrlSchemeInterceptorActivity", NoHistory = false, LaunchMode = LaunchMode.SingleTask)]
     [IntentFilter(
     new[] { Intent.ActionView },
     Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
-    DataSchemes = new[] { "<insert custom URL here>" },
+    DataSchemes = new[] { "com.inflolyseis.xamarin.oauth" },
     DataPath = "/oauth2redirect")]
     public class CustomUrlSchemeInterceptorActivity : Activity
     {

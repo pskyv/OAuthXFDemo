@@ -20,7 +20,14 @@ namespace OAuthXFDemo.ViewModels
 
         private void AuthenticateUser()
         {
-            _authenticationService.AuthenticateUser();
+            try
+            {
+                _authenticationService.AuthenticateUser();
+            }
+            catch(Exception e)
+            {
+
+            }
         }
     }
 }
