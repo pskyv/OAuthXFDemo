@@ -2,6 +2,7 @@
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Auth;
@@ -13,7 +14,7 @@ namespace OAuthXFDemo.Services
     {
         private readonly INavigationService _navigationService;
         private string authorizeUrl = $"{Constants.BaseEndpoint}/connect/authorize";
-        private string accesstokenUrl = $"{Constants.BaseEndpoint}/connect/token";
+        private string accesstokenUrl = $"{Constants.BaseEndpoint}/connect/token";        
 
         public AuthenticationService(INavigationService navigationService)
         {
@@ -51,16 +52,17 @@ namespace OAuthXFDemo.Services
             }
 
             if (e.IsAuthenticated)
-            {                
-                var accessToken = e.Account.Properties["access_token"].ToString();
-                await NavigateToPage();
+            {
+                await AccountStore.Create().SaveAsync(e.Account, Constants.AccessTokenKey); //Account properties: access_token, expires_in, refresh_token, token_type
+
+                await NavigateToPageAsync();
                 DependencyService.Get<IActivityService>().StartActivity();
             }
         }
 
-        private async Task NavigateToPage()
+        private async Task NavigateToPageAsync()
         {
-            await _navigationService.NavigateAsync("MainPage");
+            await _navigationService.NavigateAsync("NavigationPage/UserProfilePage");
         }
 
         private void OnAuthenticatorError(object sender, AuthenticatorErrorEventArgs e)

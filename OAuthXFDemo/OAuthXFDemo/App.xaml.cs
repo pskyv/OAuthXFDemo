@@ -34,7 +34,9 @@ namespace OAuthXFDemo
             containerRegistry.RegisterForNavigation<MainPage>();
             containerRegistry.RegisterForNavigation<LoginPage>();
 
-            containerRegistry.RegisterSingleton(typeof(IAuthenticationService), typeof(AuthenticationService));            
+            containerRegistry.RegisterSingleton(typeof(IAuthenticationService), typeof(AuthenticationService));
+            containerRegistry.RegisterSingleton(typeof(IApiService), typeof(ApiService));
+            containerRegistry.RegisterForNavigation<UserProfilePage>();
         }
     }
 }
