@@ -25,16 +25,14 @@ namespace OAuthXFDemo
 
         protected override async void OnInitialized()
         {
+#if DEBUG
+            LiveReload.Init();
+#endif
+
             InitializeComponent();
             
-            if (Preferences.Get("IsLoggedIn", false) && DateTime.Now < Preferences.Get("ExpiryDate", DateTime.Now))
-            {
-                await NavigationService.NavigateAsync("NavigationPage/UserProfilePage");
-            }
-            else
-            {
-                await NavigationService.NavigateAsync("LoginPage");
-            }
+            await NavigationService.NavigateAsync("LoginPage");
+            
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)

@@ -2,6 +2,7 @@
 using OAuthXFDemo.Models;
 using OAuthXFDemo.Utils;
 using Polly;
+using Refit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,26 +58,26 @@ namespace OAuthXFDemo.Services
             if (account != null)
             {                
                 _client.SetBearerToken(account.Properties["access_token"].ToString());
+                _client.BaseAddress = new Uri(Constants.BaseEndpoint);
                 //_client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
             }
         }
 
         public async Task<ApplicationUser> GetUserInfo()
         {            
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, userInfoUrl);
-            var task = ExecuteRequestAsync(request);            
+            var response = await ExecuteRequestAsync(RestService.For<IAuthenticationApi>(_client).GetUserInfo());            
 
             ApplicationUser user = null;
-            if (task.Result.StatusCode == System.Net.HttpStatusCode.OK)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                var userJson = await task.Result.Content.ReadAsStringAsync();
+                var userJson = await response.Content.ReadAsStringAsync();
                 user = JsonConvert.DeserializeObject<ApplicationUser>(userJson);
             }
 
             return user;
         }
 
-        public async Task<HttpResponseMessage> ExecuteRequestAsync(HttpRequestMessage request)
+        public async Task<HttpResponseMessage> ExecuteRequestAsync(Task<HttpResponseMessage> request)
         {
             var cts = new CancellationTokenSource();
             HttpResponseMessage response = new HttpResponseMessage();
@@ -100,15 +101,14 @@ namespace OAuthXFDemo.Services
                 )
                 .ExecuteAsync(async () =>
                 {
-                    Task<HttpResponseMessage> task = _client.SendAsync(request);
-                    runningTasks.Add(task.Id, cts);
-                    var result = task.Result;
+                    runningTasks.Add(request.Id, cts);
+                    var result = await request;
                     
                     if(result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
                         //Access token expired
                     }
-                    runningTasks.Remove(task.Id);
+                    runningTasks.Remove(request.Id);
                     return result;
                 });
 

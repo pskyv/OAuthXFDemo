@@ -5,8 +5,12 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="OAuthXFDemo.Views.LoginPage">
 
-    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-        <Button Text="Authenticate user" Command="{Binding AuthenticateUserCommand}" />
+    <StackLayout Padding="20">
+        <StackLayout Orientation="Horizontal" IsVisible="{Binding TokenExists}">
+            <Label Text="Access token expires: " />
+            <Label Text="{Binding TokenExpires, StringFormat='{}{0:dd/MM/yyyy hh:mm:ss}'}" />
+        </StackLayout>
+        <Button HorizontalOptions="Center" VerticalOptions="Center" Text="Login" Command="{Binding AuthenticateUserCommand}" BackgroundColor="DeepSkyBlue" WidthRequest="250" Margin="0,200,0,0" />
     </StackLayout>
   
 </ContentPage>

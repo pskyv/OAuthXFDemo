@@ -14,6 +14,7 @@ namespace OAuthXFDemo.ViewModels
 	{
         private readonly IApiService _apiService;
         private ApplicationUser _user;
+        private bool _isLoading;
 
         public UserProfilePageViewModel(IApiService apiService)
         {
@@ -26,15 +27,28 @@ namespace OAuthXFDemo.ViewModels
             set { SetProperty(ref _user, value); }
         }
 
-        public DateTime TokenExpires
+        public bool IsLoading
         {
-            get { return Preferences.Get("ExpiryDate", DateTime.Now); }
-        }
+            get { return _isLoading; }
+            set { SetProperty(ref _isLoading, value); }
+        }        
 
 
         public async void OnNavigatingTo(NavigationParameters parameters)
         {
-            User = await _apiService.GetUserInfo();
+            IsLoading = true;
+            try
+            {
+                User = await _apiService.GetUserInfo();
+            }
+            catch(Exception e)
+            {
+
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }
