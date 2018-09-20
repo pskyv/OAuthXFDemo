@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OAuthXFDemo.Services
@@ -11,6 +12,6 @@ namespace OAuthXFDemo.Services
     public interface IAuthenticationApi
     {
         [Get("/connect/userinfo")]
-        Task<HttpResponseMessage> GetUserInfo();
+        Task<HttpResponseMessage> GetUserInfo(CancellationToken cancellationToken);
     }
 }

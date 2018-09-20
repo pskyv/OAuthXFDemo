@@ -39,7 +39,7 @@ namespace OAuthXFDemo.ViewModels
             IsLoading = true;
             try
             {
-                User = await _apiService.GetUserInfo();
+                User = await _apiService.GetUserInfoAsync();
             }
             catch(Exception e)
             {

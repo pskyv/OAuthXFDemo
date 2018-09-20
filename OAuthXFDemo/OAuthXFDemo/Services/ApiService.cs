@@ -63,9 +63,13 @@ namespace OAuthXFDemo.Services
             }
         }
 
-        public async Task<ApplicationUser> GetUserInfo()
-        {            
-            var response = await ExecuteRequestAsync(RestService.For<IAuthenticationApi>(_client).GetUserInfo());            
+        public async Task<ApplicationUser> GetUserInfoAsync()
+        {
+            var cts = new CancellationTokenSource();
+            var task = ExecuteRequestAsync(RestService.For<IAuthenticationApi>(_client).GetUserInfo(cts.Token));
+            runningTasks.Add(task.Id, cts);
+
+            var response = await task;
 
             ApplicationUser user = null;
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -79,7 +83,6 @@ namespace OAuthXFDemo.Services
 
         public async Task<HttpResponseMessage> ExecuteRequestAsync(Task<HttpResponseMessage> request)
         {
-            var cts = new CancellationTokenSource();
             HttpResponseMessage response = new HttpResponseMessage();
 
             //check connectivity first
@@ -101,7 +104,6 @@ namespace OAuthXFDemo.Services
                 )
                 .ExecuteAsync(async () =>
                 {
-                    runningTasks.Add(request.Id, cts);
                     var result = await request;
                     
                     if(result.StatusCode == System.Net.HttpStatusCode.Unauthorized)

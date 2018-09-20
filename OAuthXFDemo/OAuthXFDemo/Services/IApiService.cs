@@ -8,6 +8,6 @@ namespace OAuthXFDemo.Services
 {
     public interface IApiService
     {
-        Task<ApplicationUser> GetUserInfo();
+        Task<ApplicationUser> GetUserInfoAsync();
     }
 }

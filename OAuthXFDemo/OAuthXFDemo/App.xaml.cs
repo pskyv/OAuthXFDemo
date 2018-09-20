@@ -8,6 +8,7 @@ using Prism.Unity;
 using OAuthXFDemo.Services;
 using Xamarin.Essentials;
 using System;
+using OAuthXFDemo.Utils;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace OAuthXFDemo
@@ -25,9 +26,12 @@ namespace OAuthXFDemo
 
         protected override async void OnInitialized()
         {
-#if DEBUG
+            #if DEBUG
             LiveReload.Init();
-#endif
+            #endif
+
+            //Register Syncfusion License
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Constants.SyncfusionLicenseKey);
 
             InitializeComponent();
             
@@ -39,11 +43,12 @@ namespace OAuthXFDemo
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
-            containerRegistry.RegisterForNavigation<LoginPage>();
-
+            containerRegistry.RegisterForNavigation<LoginPage>();                        
+            containerRegistry.RegisterForNavigation<UserProfilePage>();
+            containerRegistry.RegisterForNavigation<SchedulerPage>();
+            
             containerRegistry.RegisterSingleton(typeof(IAuthenticationService), typeof(AuthenticationService));
             containerRegistry.RegisterSingleton(typeof(IApiService), typeof(ApiService));
-            containerRegistry.RegisterForNavigation<UserProfilePage>();
         }
     }
 }
