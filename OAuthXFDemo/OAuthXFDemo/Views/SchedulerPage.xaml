@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="OAuthXFDemo.Views.SchedulerPage"
+             xmlns:schedule="clr-namespace:Syncfusion.SfSchedule.XForms;assembly=Syncfusion.SfSchedule.XForms"
+             Title="Scheduler">
+
+    <schedule:SfSchedule
+          BindingContext="{Binding}"
+          x:Name="schedule"
+          ViewHeaderHeight="40"
+          DataSource="{Binding Meetings}"
+          ScheduleView="MonthView"
+          ShowAppointmentsInline="{OnPlatform Android=False, iOS=False, UWP=True}">
+        
+        <schedule:SfSchedule.AppointmentMapping>
+            <schedule:ScheduleAppointmentMapping
+              StartTimeMapping="From"
+              EndTimeMapping="To"
+              SubjectMapping="EventName"
+              ColorMapping="color">
+            </schedule:ScheduleAppointmentMapping>
+        </schedule:SfSchedule.AppointmentMapping>
+        
+        <schedule:SfSchedule.MonthViewSettings>
+            <schedule:MonthViewSettings ShowAgendaView="True">
+            </schedule:MonthViewSettings>
+        </schedule:SfSchedule.MonthViewSettings>
+    </schedule:SfSchedule>
+
+</ContentPage>
