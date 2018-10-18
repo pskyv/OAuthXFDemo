@@ -63,6 +63,7 @@ namespace OAuthXFDemo.Droid
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahText = global::OAuthXFDemo.Droid.Resource.Styleable.ProgressWheel_ahText;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextColor = global::OAuthXFDemo.Droid.Resource.Styleable.ProgressWheel_ahTextColor;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextSize = global::OAuthXFDemo.Droid.Resource.Styleable.ProgressWheel_ahTextSize;
+			global::ModernHttpClient.Resource.String.library_name = global::OAuthXFDemo.Droid.Resource.String.library_name;
 			global::Com.Syncfusion.Schedule.Resource.Drawable.arrow_down = global::OAuthXFDemo.Droid.Resource.Drawable.arrow_down;
 			global::Com.Syncfusion.Schedule.Resource.Drawable.arrow_up = global::OAuthXFDemo.Droid.Resource.Drawable.arrow_up;
 			global::Com.Syncfusion.Schedule.Resource.Drawable.Recurrence = global::OAuthXFDemo.Droid.Resource.Drawable.Recurrence;

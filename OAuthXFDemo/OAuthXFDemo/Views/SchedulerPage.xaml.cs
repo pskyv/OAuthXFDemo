@@ -6,7 +6,7 @@ namespace OAuthXFDemo.Views
     {
         public SchedulerPage()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
     }
 }

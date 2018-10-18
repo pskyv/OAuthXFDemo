@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ModernHttpClient;
+using Newtonsoft.Json;
 using OAuthXFDemo.Models;
 using OAuthXFDemo.Utils;
 using Polly;
@@ -14,7 +15,7 @@ using Xamarin.Auth;
 using Xamarin.Essentials;
 
 namespace OAuthXFDemo.Services
-{    
+{
     public class ApiService : IApiService
     {
         private string userInfoUrl = $"{Constants.BaseEndpoint}/connect/userinfo";
@@ -33,8 +34,8 @@ namespace OAuthXFDemo.Services
 
         private void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            _networkAccess = e.NetworkAccess; 
-            if(_networkAccess == NetworkAccess.None)
+            _networkAccess = e.NetworkAccess;
+            if (_networkAccess == NetworkAccess.None)
             {
                 CancelRunningTasks();
             }
@@ -56,7 +57,7 @@ namespace OAuthXFDemo.Services
 
             var account = AccountStore.Create().FindAccountsForService(Constants.AccessTokenKey).FirstOrDefault();
             if (account != null)
-            {                
+            {
                 _client.SetBearerToken(account.Properties["access_token"].ToString());
                 _client.BaseAddress = new Uri(Constants.BaseEndpoint);
                 //_client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
@@ -65,20 +66,38 @@ namespace OAuthXFDemo.Services
 
         public async Task<ApplicationUser> GetUserInfoAsync()
         {
-            var cts = new CancellationTokenSource();
-            var task = ExecuteRequestAsync(RestService.For<IAuthenticationApi>(_client).GetUserInfo(cts.Token));
-            runningTasks.Add(task.Id, cts);
-
-            var response = await task;
-
             ApplicationUser user = null;
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+
+            try
             {
-                var userJson = await response.Content.ReadAsStringAsync();
-                user = JsonConvert.DeserializeObject<ApplicationUser>(userJson);
+                var cts = new CancellationTokenSource();
+                var task = ExecuteRequestAsync(RestService.For<IAuthenticationApi>(_client).GetUserInfo(cts.Token));
+                runningTasks.Add(task.Id, cts);
+
+                var response = await task;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var userJson = await response.Content.ReadAsStringAsync();
+                    user = JsonConvert.DeserializeObject<ApplicationUser>(userJson);
+                }
+            }
+            catch (Exception e)
+            {
+                HelperFunctions.ShowToastMessage(ToastMessageType.Error, e.Message);
             }
 
             return user;
+
+            //ApplicationUser user = null;
+            //var response = await _client.GetAsync(userInfoUrl);
+            //if(response.IsSuccessStatusCode)
+            //{
+            //    var userJson = await response.Content.ReadAsStringAsync();
+            //    user = JsonConvert.DeserializeObject<ApplicationUser>(userJson);
+            //}
+
+            //return user;
         }
 
         public async Task<HttpResponseMessage> ExecuteRequestAsync(Task<HttpResponseMessage> request)
@@ -86,7 +105,7 @@ namespace OAuthXFDemo.Services
             HttpResponseMessage response = new HttpResponseMessage();
 
             //check connectivity first
-            if(_networkAccess.Equals(NetworkAccess.None))
+            if (_networkAccess.Equals(NetworkAccess.None))
             {
                 var responseMsg = "There's no network connection";
                 response.StatusCode = System.Net.HttpStatusCode.BadRequest;
@@ -105,8 +124,8 @@ namespace OAuthXFDemo.Services
                 .ExecuteAsync(async () =>
                 {
                     var result = await request;
-                    
-                    if(result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+
+                    if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
                         //Access token expired
                     }

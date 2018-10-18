@@ -23,6 +23,13 @@ namespace OAuthXFDemo.ViewModels
 
         public ObservableCollection<Meeting> Meetings { get; set; }
 
+        public DelegateCommand ActionCommand => new DelegateCommand(DoAction);
+
+        private void DoAction()
+        {
+            //do something...
+        }
+
         private void AddAppointmentDetails()
         {
             meetingDescriptions = new List<string>();
@@ -58,7 +65,20 @@ namespace OAuthXFDemo.ViewModels
 
         private void AddRandomMeetings()
         {
-            var today = DateTime.Now.Date;
+            var today = DateTime.Today;
+            //var end = today.AddDays(5);
+            //var random = new Random();
+            //var meeting = new Meeting()
+            //{
+            //    From = today,
+            //    To = end,
+            //    EventName = "shift 1",
+            //    color = colorCollection[random.Next(10)]
+            //};
+
+            //Meetings.Add(meeting);
+
+
             var random = new Random();
             for (int month = -1; month < 2; month++)
             {

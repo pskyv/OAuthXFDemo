@@ -5,16 +5,16 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="OAuthXFDemo.Views.SchedulerPage"
              xmlns:schedule="clr-namespace:Syncfusion.SfSchedule.XForms;assembly=Syncfusion.SfSchedule.XForms"
-             Title="Scheduler">
+             Title="Scheduler"
+             x:Name="Scheduler">
 
     <schedule:SfSchedule
-          BindingContext="{Binding}"
-          x:Name="schedule"
+          x:Name="scheduler"
           ViewHeaderHeight="40"
           DataSource="{Binding Meetings}"
           ScheduleView="MonthView"
           ShowAppointmentsInline="{OnPlatform Android=False, iOS=False, UWP=True}">
-        
+
         <schedule:SfSchedule.AppointmentMapping>
             <schedule:ScheduleAppointmentMapping
               StartTimeMapping="From"
@@ -25,7 +25,7 @@
         </schedule:SfSchedule.AppointmentMapping>
         
         <schedule:SfSchedule.MonthViewSettings>
-            <schedule:MonthViewSettings ShowAgendaView="True">
+            <schedule:MonthViewSettings ShowAgendaView="True"  AppointmentDisplayMode="Appointment">
             </schedule:MonthViewSettings>
         </schedule:SfSchedule.MonthViewSettings>
     </schedule:SfSchedule>
